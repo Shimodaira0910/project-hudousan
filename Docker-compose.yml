@@ -1,0 +1,27 @@
+version: '3'
+services:
+    frontend-container:
+      image: hudousan_front_image
+      restart: always
+      tty: True
+      environment: 
+          TZ: "Asia/Tokyo"
+          NODE_ENV: development
+      ports:
+          - '3000:3000'
+      volumes:
+          - ./front/reactapp:/app
+      command: sh -c "cd reactapp && npm start"
+
+    backend-container:
+      image: hudousan_back_image
+      restart: always
+      tty: True
+      environment:
+          TZ: "Asia/Tokyo"
+      ports:
+          - '8000:8000'
+      volumes:
+          - ./back/app:/app
+          - ./back/requirements.txt:/app
+      command: uvicorn ./app/main:app --reload --host 0.0.0.0 --port 8000
